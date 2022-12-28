@@ -130,6 +130,7 @@ Idem point précédent. C'est l'approche idéale pour se 'faire la main' et comp
 - Vous considèrerez recycler des serveurs un peu anciens pour vous faire la main, si les disques sont un peu anciens changez les par des versions SSD plus rapide et fiable. Il faut généralement >16 Go de Ram et assurez-vous que les versions récentes des OS linux (debian, ubuntu) contiennent les drivers matériels appropriés pour votre serveur et que le/les processeurs est/sont 64bits. https://www.debian.org/ports/
 Il faut idéalement en prévoir 2-3 pour une configuration 'pédagogique'.
 - Vous pouvez également monter un cluster à partir de microcomputeurs de type RaspberryPi, privilégiez des modules à 8 Go de Ram. Ces petits serveurs sont assez performants et surtout ils utilisent des processeurs 'Arm' beaucoup moins consommateur d'énergie.
-
-# note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
+```
+note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
 sudo vi /boot/cmdline.txt
+```
