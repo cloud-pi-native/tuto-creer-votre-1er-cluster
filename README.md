@@ -82,8 +82,6 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
 
 ```
 #Ensuite vous pouvez installer **Lens** https://k8slens.dev/ pour facilement 'monitorer' votre cluster.
-
-
   # récupérer le fichier de configuration
   cat /etc/rancher/k3s/k3s.yaml
 
@@ -92,30 +90,29 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
     - cluster:
         certificate-authority-data: LS0t
     etc..... etc..... etc.....
-
+```
   Ajouter un nouveau cluster :
   
 ![alt_text](img/1.png "menu")
 
+
  Copier le convenu du 'cat' dans la nouvelle fenêtre et changez l'ip par celle identifiée plus haut,
+
 ![alt_text](img/2.png "creation")
- Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre cluster localement
+
+Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre cluster localement
+
 ![alt_text](img/3.png "creation")
-```
+
 
 ```
   # a tout fin utile vous pourrez récupérer le token avec la commande suivante : ( vous en aurez besoin pour plus tard )
     sudo cat /var/lib/rancher/k3s/server/token
-
 ```
 
 
-
-
-
-
 - Installer Minishift ( version local d'openshift, type cluster utilisé par le ministère de l'Intérieur )
-
+<< A FAIRE >>
 
 ##### 2. Utiliser un ou plusieurs clusters (managés) dans le cloud, la plus facile ) :
 - Pour exposer votre application vers ses usagers ;
