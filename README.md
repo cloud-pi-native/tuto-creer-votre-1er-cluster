@@ -92,9 +92,8 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
     etc..... etc..... etc.....
 ```
   Ajouter un nouveau cluster :
-  
-![alt_text](img/1.png "menu")
 
+![alt_text](img/1.png "menu")
 
  Copier le convenu du 'cat' dans la nouvelle fenêtre et changez l'ip par celle identifiée plus haut,
 
