@@ -1,4 +1,4 @@
-# 0-first-set-up-your-kube-cluster
+# Créer votre cluster pour commencer
 
 Pour permettre de mettre en place votre environnement de travail avec un cluster kubernetes. Un choix assez large d'options est disponible, cet article propose plusieurs approches pour créer le votre.
 Il vous permet de construire un cluster et progressivement utiliser une chaine de livraison logicielle compatible avec l'offre Cloud Pi Native proposée par le ministère de l'Intérieur. Il vous faudra respecter quelques conditions ou adapter votre code au choix de processeur, rootless, liste des images de références. Cf. liste de compatibilité citée en annexes.
@@ -94,11 +94,13 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
     etc..... etc..... etc.....
 
   Ajouter un nouveau cluster :
+  
+![alt_text](img/1.png "menu")
 
-
- Copier le convenu du 'cat' dans la nouvelle fenêtre et changer l'Ip par celle identifiée plus haut,
+ Copier le convenu du 'cat' dans la nouvelle fenêtre et changez l'ip par celle identifiée plus haut,
+![alt_text](img/2.png "creation")
  Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre cluster localement
- 
+![alt_text](img/3.png "creation")
 ```
 
 ```
