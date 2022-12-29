@@ -28,9 +28,9 @@ Là vous disposer de plusieurs options également.
 
   ```
 
-- Installer un **cluster K3s**, version de kubernetes économe en ressource cf. https://k3s.io/
+###### Option 1 : Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
 
-Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run/, suivez les instructions pour l'installation, cela s'installe comme un charme.
+Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run, suivez les instructions pour l'installation, cela s'installe comme un charme.
 
 ```
 # Puis... pour installer une VM pour le cluster
@@ -108,10 +108,43 @@ Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre c
   # a tout fin utile vous pourrez récupérer le token avec la commande suivante : ( vous en aurez besoin pour plus tard )
     sudo cat /var/lib/rancher/k3s/server/token
 ```
+Vous êtes opérationnel pour commencer :)
 
 
-- Installer Minishift ( version local d'openshift, type cluster utilisé par le ministère de l'Intérieur )
-<< A FAIRE >>
+###### Option 2 : Installer Minishift ( version sur poste de travail d'openshift )
+Openshift est l'une des technologies utilisées par le ministère de l'Intérieur.
+
+Vous devrez créer un compte développeur (gratuit)
+
+https://developers.redhat.com/products/openshift-local/overview
+
+Sélection le type d'OS et de processeurs ( ici Arm car MacBook Pro M1)
+Récupérez le secret (nécessaire pour l'installation )
+
+![alt_text](img/siteopsl.png "menu") ![alt_text](img/dwlgoc.png "menu")
+
+https://access.redhat.com/documentation/en-us/red_hat_openshift_local/2.12
+
+Lancement de l'installer, puis de l'application 'open shift local'
+Suivez les demandes (vous devrez spécifier votre secret), lancez ensuite l'application et attendez quelques minutes que le cluster soit 'up'.
+
+![alt_text](img/oclocal.png "menu")
+
+![alt_text](img/opsl.png "menu")
+
+Ensuite lancer la console depuis le menu 'openshift'
+
+![alt_text](img/opshmenu.png "openshift")
+
+Ensuite vous pouvez ouvrir votre cluster dans 'Lens'
+
+![alt_text](img/lens-opsh-setup.png "openshift")
+
+Vous pouvez visualiser l'état de celui-ci
+
+![alt_text](img/lens-opsh-run.png "openshift")
+
+**Vous êtes opérationnel pour commencer :)**
 
 ##### 2. Utiliser un ou plusieurs clusters (managés) dans le cloud, la plus facile ) :
 - Pour exposer votre application vers ses usagers ;
