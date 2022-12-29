@@ -177,6 +177,7 @@ L'avantage est que vous n'avez pas à gérer votre cluster si à maitriser tous 
 Les offre sous processeurs Arm sont généralement assez rare sauf à prendre des Mac 'M1'.
 
 Pour démarrer vous pouvez utiliser des comptes d'évaluation valable quelques mois, l'ensemble des 'hyperscalers' proposent cette option.
+
 TODO : < A FAIRE>
 
 ### 3. Monter votre propre cluster 'on premise' (pour les plus curieux) ;
