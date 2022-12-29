@@ -10,14 +10,18 @@ https://www.youtube.com/watch?v=X48VuDVv0do ( court complet 4H )
 
 Vous disposer de plusieurs possibilités pour monter votre environnement, dans le cloud ou en local. Vous commencerez probablement sur votre poste de travail et irez ensuite vers une combinaison hybride :
 
-##### 1. Monter votre cluster sur votre poste de travail : (commencez par celle-ci)
+### 1. Monter votre cluster sur votre poste de travail : (commencez par celle-ci)
 L'option généralement la plus confortable pour débuter ou pour un développeur.
 Pré-requis : un ordinateur Mac ou Unix (PC possible) avec à minima 8Go de RAM et plusieurs processeurs.
 Note: Cet article a été réalisé à partir de MacBook Pro 'M1' (processeur de type Arm) et testé sur des VM linux Ubuntu Arm.
 Là vous disposer de plusieurs options également.
-- Installer **DockerDestop** : permet d'activer simultanément l'ensembles des outils docker et d'un minicluster kubernetes.
-(peux nécessiter une licence)
-- Installer un **cluster minishift** une version réduite en appel à ressource, sur Mac et PC vous devez disposer de la capacité d'exécution de VM tel que par exemple : https://multipass.run/, suivez les instructions pour l'installation, cela s'installe comme un charme.
+- Installer **DockerDestop** : (peut nécessiter une licence)
+
+  permet d'activer simultanément l'ensembles des outils docker et d'un minicluster kubernetes.
+
+- Installer un **cluster local** réduit en ressource (un seul noeud) sur Mac, PC et Linux.
+
+  vous devez disposer de la capacité d'exécution de VM tel que par exemple : https://multipass.run/ (suivez les instructions d'installation fournies)
 
   ```
   # Permet de lancer un mini cluster kubernetes (8Go Ram, 5 vcpu, 60G de disque)
@@ -27,15 +31,15 @@ Là vous disposer de plusieurs options également.
   multipass exec my-first-kube -- lsb_release -a
   ```
 
-###### Option 1 : Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
+  ###### Option 1.1 : Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
 
-Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run, suivez les instructions pour l'installation, cela s'installe comme un charme.
+  Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run, suivez les instructions pour l'installation, cela s'installe comme un charme.
 
 ```
-# Puis... pour installer une VM pour le cluster
+# Pour installer une VM pour le cluster
 multipass launch lts --name k3s-server  -m 8g -c 5 -d 60G
 
-# (Pui) Installer un master k3s avec les droits d'accès sur l'ensemble des utilisateurs
+# Installer un master k3s avec les droits d'accès sur l'ensemble des utilisateurs
 multipass shell k3s-server
 sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
 
@@ -73,22 +77,23 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
    Processes:               157
    Users logged in:         1
    IPv4 address for cni0:   10.42.0.1
-*> IPv4 address for enp0s1: 192.168.64.4 <**********************
+*> IPv4 address for enp0s1: 192.168.64.X <******* CETTE IP ICI
    IPv6 address for enp0s1: fd12:d3ea:b18f:437b:5054:ff:fecd:9738
 ```
 
   ###### Gérer son cluster
 
 ```
-#Ensuite vous pouvez installer **Lens** https://k8slens.dev/ pour facilement 'monitorer' votre cluster.
-  # récupérer le fichier de configuration
+# Pour interagir facilement / monitorer votre cluster > installer **Lens** https://k8slens.dev/ .
+
+# Vous devez récupérer le fichier de configuration, (copier le résultat de la commande suivante)
   cat /etc/rancher/k3s/k3s.yaml
 
     apiVersion: v1
     clusters:
     - cluster:
         certificate-authority-data: LS0t
-    etc..... etc..... etc.....
+    .../... (réponse coupée)
 ```
   Ajouter un nouveau cluster :
 
@@ -125,7 +130,8 @@ Récupérez le secret (nécessaire pour l'installation )
 https://access.redhat.com/documentation/en-us/red_hat_openshift_local/2.12
 
 Lancement de l'installer, puis de l'application 'open shift local'
-Suivez les demandes (vous devrez spécifier votre secret),
+Suivez les demandes (vous devrez spécifier votre secret)
+
 ![alt_text](img/oclocal.png "menu")
 
 Lancez ensuite l'application et attendez quelques minutes que le cluster soit 'up'.
@@ -158,9 +164,9 @@ Vous pouvez visualiser l'état de celui-ci
 
 ![alt_text](img/lens-opsh-run.png "openshift")
 
-**Vous êtes opérationnel pour commencer :)**
+Vous êtes opérationnel :)
 
-##### 2. Utiliser un ou plusieurs clusters (managés) dans le cloud, la plus facile ) :
+### 2. Utiliser un ou plusieurs clusters (managés) dans le cloud, la plus facile ) :
 - Pour exposer votre application vers ses usagers ;
 - Séparer l'environnement d'exécution du poste de travail du développeur ;
 - Travailler en groupe ;
@@ -171,7 +177,7 @@ Les offre sous processeurs Arm sont généralement assez rare sauf à prendre de
 
 Pour démarrer vous pouvez utiliser des comptes d'évaluation valable quelques mois, l'ensemble des 'hyperscalers' proposent cette option.
 
-##### 3. Monter votre propre cluster 'on premise' (pour les plus curieux) ;
+### 3. Monter votre propre cluster 'on premise' (pour les plus curieux) ;
 Idem point précédent. C'est l'approche idéale pour se 'faire la main' et comprendre les principes fondamentaux de kubernetes y compris l'approche 'baremetal'.
 
 - Vous considèrerez recycler des serveurs un peu anciens pour vous faire la main, si les disques sont un peu anciens changez les par des versions SSD plus rapide et fiable. Il faut généralement >16 Go de Ram et assurez-vous que les versions récentes des OS linux (debian, ubuntu) contiennent les drivers matériels appropriés pour votre serveur et que le/les processeurs est/sont 64bits. https://www.debian.org/ports/
