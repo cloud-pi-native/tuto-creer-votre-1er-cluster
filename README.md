@@ -177,6 +177,7 @@ L'avantage est que vous n'avez pas à gérer votre cluster si à maitriser tous 
 Les offre sous processeurs Arm sont généralement assez rare sauf à prendre des Mac 'M1'.
 
 Pour démarrer vous pouvez utiliser des comptes d'évaluation valable quelques mois, l'ensemble des 'hyperscalers' proposent cette option.
+TODO : < A FAIRE>
 
 ### 3. Monter votre propre cluster 'on premise' (pour les plus curieux) ;
 Idem point précédent. C'est l'approche idéale pour se 'faire la main' et comprendre les principes fondamentaux de kubernetes y compris l'approche 'baremetal'.
@@ -188,3 +189,5 @@ Il faut idéalement en prévoir 2-3 pour une configuration 'pédagogique'.
 note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
 sudo vi /boot/cmdline.txt
 ```
+
+TODO : < A FAIRE>
