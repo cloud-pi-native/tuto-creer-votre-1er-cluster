@@ -130,12 +130,16 @@ Récupérez le secret (nécessaire pour l'installation )
 
 https://access.redhat.com/documentation/en-us/red_hat_openshift_local/2.12
 
+et ( cf ligne de commande )
+
+https://crc.dev/crc/#introducing_gsg
+
 Lancement de l'installer, puis de l'application 'open shift local'
 Suivez les demandes (vous devrez spécifier votre secret)
 
 ![alt_text](img/oclocal.png "menu")
 
-Lancez ensuite l'application et attendez quelques minutes que le cluster soit 'up'.
+Lancez ensuite l'application et attendez 2-3 minutes que l'ensemble des 'operators' du cluster soit 'up'.
 
 ![alt_text](img/opsl.png "menu")
 
