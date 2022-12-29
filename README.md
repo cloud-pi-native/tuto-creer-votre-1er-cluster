@@ -25,7 +25,6 @@ Là vous disposer de plusieurs options également.
 
   # Attendre quelques minutes puis lancer la commande suivante
   multipass exec my-first-kube -- lsb_release -a
-
   ```
 
 ###### Option 1 : Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
