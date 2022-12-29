@@ -126,17 +126,32 @@ Récupérez le secret (nécessaire pour l'installation )
 https://access.redhat.com/documentation/en-us/red_hat_openshift_local/2.12
 
 Lancement de l'installer, puis de l'application 'open shift local'
-Suivez les demandes (vous devrez spécifier votre secret), lancez ensuite l'application et attendez quelques minutes que le cluster soit 'up'.
-
+Suivez les demandes (vous devrez spécifier votre secret),
 ![alt_text](img/oclocal.png "menu")
+
+Lancez ensuite l'application et attendez quelques minutes que le cluster soit 'up'.
 
 ![alt_text](img/opsl.png "menu")
 
+
+
+Pour récupérer le mot de passe, lancer 'Open developer terminal' depuis le menu puis exécuter la commande suivante
+
+```
+crc console --credentials
+To login as a regular user, run 'oc login -u developer -p developer https://api.crc.testing:6443'.
+To login as an admin, run 'oc login -u kubeadmin -p <<VOTRE MOT DE PASSE ICI>> https://api.crc.testing:6443'
+
+```
+
 Ensuite lancer la console depuis le menu 'openshift'
+(comme le certificat est autosigné, vous devrez valider plusieures exception de sécurité)
 
 ![alt_text](img/opshmenu.png "openshift")
 
-Ensuite vous pouvez ouvrir votre cluster dans 'Lens'
+https://console-openshift-console.apps-crc.testing/dashboards
+
+Ensuite vous pouvez également ouvrir votre cluster dans l'application 'Lens'
 
 ![alt_text](img/lens-opsh-setup.png "openshift")
 
