@@ -76,11 +76,13 @@ Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous
 ```
 
   ###### Gérer son cluster avec l'application 'Lens'
+  **Lens**  permet d'interagir facilement / monitorer votre cluster sans nécessiter d'installer des services dans le cluster. Pour installer le logiciel :  https://k8slens.dev/ .
 
 ```
-# Lens permet d'interagir facilement / monitorer votre cluster sans nécessiter d'installer des services dans le cluster > installer **Lens** https://k8slens.dev/ .
+# Une fois l'application installée pour accéder à votre cluster
+# vous devez récupérer le fichier de configuration kubernetes.
+# >Copier le résultat de la commande suivante dans Lens.
 
-# Vous devez récupérer le fichier de configuration, (copier le résultat de la commande suivante)
   cat /etc/rancher/k3s/k3s.yaml
 
     apiVersion: v1
@@ -89,7 +91,7 @@ Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous
         certificate-authority-data: LS0t
     .../... (réponse coupée)
 ```
-  Ajouter un nouveau cluster :
+  Dans Lens ajoutez un nouveau cluster :
 
 ![alt_text](img/1.png "menu")
 
@@ -97,7 +99,7 @@ Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous
 
 ![alt_text](img/2.png "creation")
 
-Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre cluster localement
+  Cela crée une nouvelle entrée et vous pouvez ensuite vous connecter à votre cluster localement
 
 ![alt_text](img/3.png "creation")
 
