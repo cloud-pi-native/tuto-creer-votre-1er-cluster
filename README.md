@@ -16,33 +16,24 @@ L'option généralement la plus confortable pour débuter ou pour un développeu
 Pré-requis : un ordinateur Mac ou Unix (PC possible) avec à minima 8Go de RAM et plusieurs processeurs.
 Note: Cet article a été réalisé à partir de MacBook Pro 'M1' (processeur de type Arm) et testé sur des VM linux Ubuntu Arm.
 Là vous disposer de plusieurs options également.
-- Installer **DockerDestop** : (peut nécessiter une licence)
 
-  permet d'activer simultanément l'ensembles des outils docker et d'un minicluster kubernetes.
+###### Option 1.1 : Installer **DockerDestop** : (peut nécessiter une licence)
 
-- Installer un **cluster local** réduit en ressource (un seul noeud) sur Mac, PC et Linux.
+Permet d'activer simultanément l'ensembles des outils docker et d'un minicluster kubernetes. ( à activer dans les préférences)
+cf https://www.docker.com/.
 
-  vous devez disposer de la capacité d'exécution de VM tel que par exemple : https://multipass.run/ (suivez les instructions d'installation fournies)
+###### Option 1.2: Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
+
+Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run, suivez les instructions pour l'installation, cela s'installe comme un charme.
 
   ```
-  # Permet de lancer un mini cluster kubernetes (8Go Ram, 5 vcpu, 60G de disque)
-  multipass launch lts --name k3s-server  -m 8g -c 5 -d 60G
+  # Lancer la commande suivate pour créer une VM d'accueil pour le mini cluster kubernetes : 8Go Ram, 4 vcpu, 60G de disque), vous pouvez modifier ces valeurs.
 
-  # Attendre quelques minutes puis lancer la commande suivante
-  multipass exec my-first-kube -- lsb_release -a
-  ```
-
-  ###### Option 1.1 : Installer un **cluster K3s**, version économe en ressource cf. https://k3s.io/
-
-  Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous pouvez utiliser  https://multipass.run, suivez les instructions pour l'installation, cela s'installe comme un charme.
-
-```
-# Pour installer une VM pour le cluster
-multipass launch lts --name k3s-server  -m 8g -c 5 -d 60G
+  multipass launch lts --name k3s-server  -m 8g -c 4 -d 60G
 
 # Installer un master k3s avec les droits d'accès sur l'ensemble des utilisateurs
-multipass shell k3s-server
-sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+  multipass shell k3s-server
+  sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
 
 # Vérifier la disponibilité du worker node.
   ubuntu@k3s-server:~$   kubectl get nodes
@@ -59,11 +50,13 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
   kube-system   traefik-bb69b68cd-x257d                   1/1     Running     0          3m38s
   kube-system   metrics-server-5c8978b444-g55zj           1/1     Running     0          3m47s
 ```
-  ###### Préparer l'utilisation de votre cluster
+   ###### Préparer l'utilisation de votre cluster
 
 ```
- #Rechercher l'ip locale de votre machine dans le haut de la fenêtres en déroulant vers le haut
- Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-56-generic aarch64)
+ #Rechercher l'ip locale de votre machine dans le haut de la fenêtres en déroulant vers le haut pour retrouver dans les messages initiaux de la VM
+
+
+   Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-56-generic aarch64)
 
   * Documentation:  https://help.ubuntu.com
   * Management:     https://landscape.canonical.com
@@ -82,10 +75,10 @@ sudo curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
    IPv6 address for enp0s1: fd12:d3ea:b18f:437b:5054:ff:fecd:9738
 ```
 
-  ###### Gérer son cluster
+  ###### Gérer son cluster avec l'application 'Lens'
 
 ```
-# Pour interagir facilement / monitorer votre cluster > installer **Lens** https://k8slens.dev/ .
+# Lens permet d'interagir facilement / monitorer votre cluster sans nécessiter d'installer des services dans le cluster > installer **Lens** https://k8slens.dev/ .
 
 # Vous devez récupérer le fichier de configuration, (copier le résultat de la commande suivante)
   cat /etc/rancher/k3s/k3s.yaml
