@@ -76,7 +76,8 @@ Sur Mac et PC vous devez disposer de la capacité d'exécution de VM linux, vous
 ```
 
   ###### Gérer son cluster avec l'application 'Lens'
-  **Lens**  permet d'interagir facilement / monitorer votre cluster sans nécessiter d'installer des services dans le cluster. Pour installer le logiciel :  https://k8slens.dev/ .
+  **Lens**  permet d'interagir facilement / monitorer votre cluster sans nécessiter d'installer des services dans le cluster. Pour installer le logiciel :  https://k8slens.dev/ Vous devrez vous créer un compte sur Lens, utiliser votre login github pour vous logguer
+  .
 
 ```
 # Une fois l'application installée pour accéder à votre cluster
@@ -180,6 +181,7 @@ Pour démarrer vous pouvez utiliser des comptes d'évaluation valable quelques m
 TODO : < A FAIRE>
 
 ### 3. Monter votre propre cluster 'on premise' (pour les plus curieux) ;
+
 Idem point précédent. C'est l'approche idéale pour se 'faire la main' et comprendre les principes fondamentaux de kubernetes y compris l'approche 'baremetal'.
 
 - Vous considèrerez recycler des serveurs un peu anciens pour vous faire la main, si les disques sont un peu anciens changez les par des versions SSD plus rapide et fiable. Il faut généralement >16 Go de Ram et assurez-vous que les versions récentes des OS linux (debian, ubuntu) contiennent les drivers matériels appropriés pour votre serveur et que le/les processeurs est/sont 64bits. https://www.debian.org/ports/
@@ -188,6 +190,73 @@ Il faut idéalement en prévoir 2-3 pour une configuration 'pédagogique'.
 ```
 note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
 sudo vi /boot/cmdline.txt
+
+# Pour monter un cluster k3s resistant aux pannes, il est recommandé de
+- installer un cluster MariaDB sur 3 noeuds ( nombre impair ) avec réplication.
+cf. https://www.atlantic.net/vps-hosting/how-to-install-and-configure-mariadb-galera-cluster-on-ubuntu-18-04/ ( tips : passez les premières étapes afin de gardez la version de mariadb maintenue par la communauté Débian )
+- Puis suivre la procédure https://docs.k3s.io/installation (avec la base de donnée mariadb partagée)
+
+mysql -u root -p ( saisissez <<votre-mot-de-passe-root-db>> )
+#dans votre base de données >
+create database k3s_cluster;
+CREATE USER k3s@localhost IDENTIFIED BY <<votre-mot-de-passe-k3s>>;
+GRANT ALL PRIVILEGES ON k3s_cluster.* TO k3s@localhost;
+FLUSH PRIVILEGES;
+<ctrl-c>
+
+# vérifier la réplication des bases de données en vous connectant sur les autres noeuds
+mysql -u root -p ( saisissez <<votre-mot-de-passe-root-db>> )
+show databases;
+
+show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| k3s_cluster        |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.001 sec)
+
+SELECT User FROM mysql.user;
++-------------+
+| User        |
++-------------+
+| k3s         |
+| mariadb.sys |
+| mysql       |
+| root        |
++-------------+
+4 rows in set (0.004 sec)
+
+
+#executer la commande suivante sur le premier node :
+
+curl -sfL https://get.k3s.io | sh -s - server \
+--datastore-endpoint="mysql://k3s:<<votre-mot-de-passe-k3s>>@tcp(localhost:3306)/k3s_cluster" \
+--write-kubeconfig-mode 644
+
+#récuperez le token ( pour que les autres nodes prennent la même clés)
+sudo cat /var/lib/rancher/k3s/server/token
+
+curl -sfL https://get.k3s.io | sh -s - server \
+--datastore-endpoint="mysql://k3s:oF4Tz6QcY48HHiQx@tcp(localhost:3306)/k3s_cluster" \
+--write-kubeconfig-mode 644 \
+--token="<<VOTRE-TOKEN_ICI>>"
+
+# installer le client HELM ( packager de kubernetes, lien avec l'installation pour debian)
+https://helm.sh/docs/intro/install/#from-apt-debianubuntu
+
+#pensez à taper la ligne de commande suivante
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+En option pour le reverse proxy d'entrée -> utilisation de MetalLB: https://metallb.universe.tf/installation/#installation-with-helm,  load balancing via ARP sur l'ensemble des noeuds
+
+kubectl apply -f metalbl-pool.yaml -n default
+
+voir fichier : metalbl-pool.yaml ( pensez à changer les IPs )
+
 ```
 
 TODO : < A FAIRE>
