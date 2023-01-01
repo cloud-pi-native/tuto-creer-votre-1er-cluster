@@ -186,10 +186,15 @@ Idem point précédent. C'est l'approche idéale pour se 'faire la main' et comp
 
 - Vous considèrerez recycler des serveurs un peu anciens pour vous faire la main, si les disques sont un peu anciens changez les par des versions SSD plus rapide et fiable. Il faut généralement >16 Go de Ram et assurez-vous que les versions récentes des OS linux (debian, ubuntu) contiennent les drivers matériels appropriés pour votre serveur et que le/les processeurs est/sont 64bits. https://www.debian.org/ports/
 Il faut idéalement en prévoir 2-3 pour une configuration 'pédagogique'.
-- Vous pouvez également monter un cluster à partir de microcomputeurs de type RaspberryPi, privilégiez des modules à 8 Go de Ram. Ces petits serveurs sont assez performants et surtout ils utilisent des processeurs 'Arm' beaucoup moins consommateur d'énergie.
+- Vous pouvez également monter un cluster à partir de microcomputeurs de type RaspberryPi, privilégiez des modules à 8 Go de Ram. Ces petits serveurs sont assez performants et surtout ils utilisent des processeurs
+'Arm' beaucoup moins consommateur d'énergie.
+
 ```
-note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
+# note : si raspeberyPi penser à ajouter cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 en fin du fichier /boot/cmdline.txt avec la cmd suivante :
 sudo vi /boot/cmdline.txt
+
+#update/upgrade du systeme
+sudo apt update && sudo apt -y upgrade
 
 # Pour monter un cluster k3s resistant aux pannes, il est recommandé de
 - installer un cluster MariaDB sur 3 noeuds ( nombre impair ) avec réplication.
@@ -230,9 +235,10 @@ SELECT User FROM mysql.user;
 +-------------+
 4 rows in set (0.004 sec)
 
+```
 
 #executer la commande suivante sur le premier node :
-
+```
 curl -sfL https://get.k3s.io | sh -s - server \
 --datastore-endpoint="mysql://k3s:<<votre-mot-de-passe-k3s>>@tcp(localhost:3306)/k3s_cluster" \
 --write-kubeconfig-mode 644
@@ -256,7 +262,71 @@ En option pour le reverse proxy d'entrée -> utilisation de MetalLB: https://met
 kubectl apply -f metalbl-pool.yaml -n default
 
 voir fichier : metalbl-pool.yaml ( pensez à changer les IPs )
-
 ```
 
-TODO : < A FAIRE>
+```
+# Pour installer chacun des worker nodes :
+# Installer un load balancer sur l'API kubernetes, une option consiste à placer le load-balanceur sur les worker-nodes directement afin d'éviter d'installer un lB externe qu'il faut redonder lui-même etc...
+
+# Sur chaque node installer Nginx (tout autre load balancer https/http fera l'affaire.)
+sudo apt-get install nginx
+
+# deployer le fichier nginx.conf ( écoute en local sur le port 6443 )
+
+# tester la connection au master
+
+curl -k https://localhost:6443
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Failure",
+  "message": "Unauthorized",
+  "reason": "Unauthorized",
+  "code": 401
+  }
+
+# Deployer le node K3S client ( tips : si RaspberryPi pensez à mettre à jour le fichier /boot/cmdline.txt )
+sudo curl -sfL https://get.k3s.io | K3S_URL=http://localhost:6443 \
+K3S_TOKEN=<<mynodetoken>>\
+sh -
+[INFO]  Finding release for channel stable
+[INFO]  Using v1.25.4+k3s1 as release
+[INFO]  Downloading hash https://github.com/k3s-io/k3s/releases/download/v1.25.4+k3s1/sha256sum-arm64.txt
+[INFO]  Downloading binary https://github.com/k3s-io/k3s/releases/download/v1.25.4+k3s1/k3s-arm64
+[INFO]  Verifying binary download
+[INFO]  Installing k3s to /usr/local/bin/k3s
+[INFO]  Skipping installation of SELinux RPM
+[INFO]  Creating /usr/local/bin/kubectl symlink to k3s
+[INFO]  Creating /usr/local/bin/crictl symlink to k3s
+[INFO]  Creating /usr/local/bin/ctr symlink to k3s
+[INFO]  Creating killall script /usr/local/bin/k3s-killall.sh
+[INFO]  Creating uninstall script /usr/local/bin/k3s-agent-uninstall.sh
+[INFO]  env: Creating environment file /etc/systemd/system/k3s-agent.service.env
+[INFO]  systemd: Creating service file /etc/systemd/system/k3s-agent.service
+[INFO]  systemd: Enabling k3s-agent unit
+Created symlink /etc/systemd/system/multi-user.target.wants/k3s-agent.service → /etc/systemd/system/k3s-agent.service.
+[INFO]  systemd: Starting k3s-agent
+
+# pour vérifier votre cluster : ( ici 3 nodes master 3 agent)
+
+kubectl get nodes
+node1   Ready    control-plane,master   33h     v1.25.4+k3s1
+node3   Ready    <none>                 20m     v1.25.4+k3s1
+node0   Ready    control-plane,master   34h     v1.25.4+k3s1
+node4   Ready    <none>                 2m56s   v1.25.4+k3s1
+node5   Ready    <none>                 106s    v1.25.4+k3s1
+node2   Ready    control-plane,master   33h     v1.25.4+k3s1
+
+# Vérifier que les nodes répondent aux requêtes (à faire sur tout les nodes );
+curl -k https://<<IP-D'UN-NODE>>
+404 page not found # veux dire que le node réponds
+```
+
+```
+Uninstalling
+If you installed K3s with the help of the install.sh script, an uninstall script is generated during installation.
+ The script is created on your node at /usr/local/bin/k3s-uninstall.sh (or as /usr/local/bin/k3s-agent-uninstall.sh).
+```
+
+TODO : ajouter prometheus et configuration du metalLB
