@@ -257,11 +257,29 @@ https://helm.sh/docs/intro/install/#from-apt-debianubuntu
 #pensez à taper la ligne de commande suivante
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-En option pour le reverse proxy d'entrée -> utilisation de MetalLB: https://metallb.universe.tf/installation/#installation-with-helm,  load balancing via ARP sur l'ensemble des noeuds
+Utilisation de MetalLB pour mettre en place un reverse proxy d'entrée
+cf. https://metallb.universe.tf/installation/#installation-with-helm,  (load balancing des noeuds via ARP )
 
-kubectl apply -f metalbl-pool.yaml -n default
+helm repo add metallb https://metallb.github.io/metallb
+helm repo list
+metallb	https://metallb.github.io/metallb
 
-voir fichier : metalbl-pool.yaml ( pensez à changer les IPs )
+# cf voir fichier : metalbl-pool.yaml ( pensez à adapter les IPs à votre configuration )
+
+helm install metallb metallb/metallb -f metalbl-pool.yaml
+NAME: metallb
+LAST DEPLOYED: Sun Jan  1 21:28:34 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+MetalLB is now running in the cluster.
+
+Now you can configure it via its CRs. Please refer to the metallb official docs
+on how to use the CRs.
+
+kubectl apply -f metalbl-pool.yaml
 ```
 
 ```
@@ -308,15 +326,18 @@ sh -
 Created symlink /etc/systemd/system/multi-user.target.wants/k3s-agent.service → /etc/systemd/system/k3s-agent.service.
 [INFO]  systemd: Starting k3s-agent
 
-# pour vérifier votre cluster : ( ici 3 nodes master 3 agent)
+# Vérifier votre cluster: ( ici 3 nodes master + 3 agents)
+# à faire si erreur : The connection to the server localhost:8080 was refused ...
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml  
 
-kubectl get nodes
-node1   Ready    control-plane,master   33h     v1.25.4+k3s1
-node3   Ready    <none>                 20m     v1.25.4+k3s1
-node0   Ready    control-plane,master   34h     v1.25.4+k3s1
-node4   Ready    <none>                 2m56s   v1.25.4+k3s1
-node5   Ready    <none>                 106s    v1.25.4+k3s1
-node2   Ready    control-plane,master   33h     v1.25.4+k3s1
+kubectl get nodes --sort-by=.metadata.name -o wide # classé par nom
+NAME    STATUS   ROLES                  AGE   VERSION        INTERNAL-IP      EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION   CONTAINER-RUNTIME
+node0   Ready    control-plane,master   34h   v1.25.4+k3s1   192.168.150.21   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
+node1   Ready    control-plane,master   34h   v1.25.4+k3s1   192.168.150.22   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
+node2   Ready    control-plane,master   34h   v1.25.4+k3s1   192.168.150.23   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
+node3   Ready    <none>                 40m   v1.25.4+k3s1   192.168.150.24   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
+node4   Ready    <none>                 22m   v1.25.4+k3s1   192.168.150.25   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
+node5   Ready    <none>                 21m   v1.25.4+k3s1   192.168.150.26   <none>        Debian GNU/Linux 11 (bullseye)   5.15.76-v8+      containerd://1.6.8-k3s1
 
 # Vérifier que les nodes répondent aux requêtes (à faire sur tout les nodes );
 curl -k https://<<IP-D'UN-NODE>>
