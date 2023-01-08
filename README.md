@@ -344,6 +344,29 @@ curl -k https://<<IP-D'UN-NODE>>
 404 page not found # veux dire que le node réponds
 ```
 
+# Déploiement de Prométheus ( afin de fournir des métriques du clusters )
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+
+# Install kubernetes operator
+https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md
+
+sudo apt-get install -y jq
+LATEST=$(curl -s https://api.github.com/repos/prometheus-operator/prometheus-operator/releases/latest | jq -cr .tag_name)
+curl -sL https://github.com/prometheus-operator/prometheus-operator/releases/download/${LATEST}/bundle.yaml | kubectl create -f -
+kubectl wait --for=condition=Ready pods -l  app.kubernetes.io/name=prometheus-operator -n default
+
+
+
+
+
+```
+
+
+
+
 ```
 Uninstalling
 If you installed K3s with the help of the install.sh script, an uninstall script is generated during installation.
